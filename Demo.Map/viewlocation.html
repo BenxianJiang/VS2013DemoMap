@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <title>Weather</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.1.3/material.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="css/weatherapp.css" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="shortcut icon" sizes="196x196" href="images/icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="images/icon.png" />
+</head>
+<body onload="initPage();">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <button onclick="location.href = 'index.html';" class="mdl-layout-icon mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title" id="headerBarTitle">View Location</span>
+            </div>
+        </header>
+        <main class="mdl-layout_content">
+            <div class="content-grid mdl-grid">
+                <div class="mdl-cell">
+                    <table>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr><td><b>Weather</b></td><td></td></tr>
+                                    <tr><td>Location:</td><td><span id="currentAddress"></span>   <input type="button" id="btnRemove" value="Remove Location" onclick="removeLocation()" /></td></tr>
+                                    <tr><td>Date:</td><td><span id="weatherDate"></span></td></tr>
+                                    <tr><td>Select Date:</td><td><input type="range" id="dateSlider" name="dateSlider" min="-29" max="0" onclick="displayWeather(this.value);" value="0" style="width: 280px" /></td></tr>
+                                    <tr><td>Summary:</td><td><span id="weatherSummary" /></td></tr>
+                                    <tr><td>Low:  <span id="minTemp" /></td><td>High: <span id="maxTemp" /></td></tr>
+                                    <tr><td>Humidity:</td><td><span id="humidity" /></td></tr>
+                                    <tr><td>Wind Speed:</td><td><span id="windSpeed" /></td></tr>
+                                    <!--<tr><td>Debug:</td><td><div id="debug" /></td></tr>-->
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="mdl-cell" id="map_canvas" style="width: 320px; height: 480px;" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!--   JavaScript files:   -->
+    <script src="js/locationWeatherCache.js"></script>
+    <script src="js/viewLocationPage.js"></script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+</body>
+</html>
