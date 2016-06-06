@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="addlocation.html" />
+    <Content Include="API_Key.txt" />
     <Content Include="currentLocation.html" />
     <Content Include="images\clear-day.png" />
     <Content Include="images\clear-night.png" />
@@ -87,6 +88,7 @@
     <Content Include="js\knowledgePage.js" />
     <Content Include="js\locationWeatherCache.js" />
     <Content Include="js\mainPage.js" />
+    <Content Include="js\viewCurrentLocation.js" />
     <Content Include="js\viewLocationPage.js" />
     <Content Include="knowledge.html" />
     <Content Include="viewlocation.html" />

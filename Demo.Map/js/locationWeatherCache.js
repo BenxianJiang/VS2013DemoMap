@@ -1,6 +1,6 @@
 //global variable to store location weather cache object
 var locationWeatherCache = new LocationWeatherCache();
-//var weatherUrl = "https://api.forecast.io/forecast/549ffc7d0eee04bebeb149307c50a776/"
+//var cathyweatherUrl = "https://api.forecast.io/forecast/549ffc7d0eee04bebeb149307c50a776/"
 var WEATHER_URL_KEY = "https://api.forecast.io/forecast/044c9e5b7dea840a676a3d5ffe2e10df/";
 
 //sample url = https://api.forecast.io/forecast/044c9e5b7dea840a676a3d5ffe2e10df/37.8267,-122.423,2016-05-14T12:00:00?exclude==currently,minutely,hourly;
@@ -84,7 +84,7 @@ function LocationWeatherCache() {
             forecasts: {}
         };
 
-        var index = this.indexForLocation(latitude, longitude);
+        var index = indexForLocation(latitude, longitude);
 
         //alert("location to add = " + JSON.stringify(newLocation));
 
@@ -102,13 +102,15 @@ function LocationWeatherCache() {
     // Removes the saved location at the given index.
     // 
     this.removeLocationAtIndex = function (index) {
+        var n = locations.length;
+
         //check if there are locations and whether the index exists in the locations array
-        if (this.length() > 0 && index < this.length() && index >= 0) {
-            alert("Before remove = " + JSON.stringify(locations));
+        if (n > 0 && index < n && index >= 0) {
+            //alert("Before remove = " + JSON.stringify(locations));
             //remove it from the locations array
             locations.splice(index, 1);
 
-            alert("after remove = " + JSON.stringify(locations));
+            //alert("after remove = " + JSON.stringify(locations));
         }
     }
 
@@ -139,7 +141,6 @@ function LocationWeatherCache() {
             locations = [];
             //alert("is null");
         }
-
         //or locations = locationWeatherCachePDO.locations;
     };
 
@@ -226,6 +227,31 @@ function LocationWeatherCache() {
 
     };
 
+    this.getAllLocations = function () {
+        return locations;
+    }
+
+    this.loadFromLocalStorage = function()
+    {
+        var locationText = localStorage.getItem(APP_PREFIX + "-Locations");
+        
+        if (locationText != null) {
+            //alert("storage locations = " + locationText);
+            this.initialiseFromPDO(JSON.parse(locationText));
+        }
+        else {
+            //alert("no content!");
+        }
+    }
+
+    //save private location into sessionStorage
+    this.storeLocationIntoStorage = function () {
+        var data = JSON.stringify(this.toJSON());
+        //alert("currentLocation store into session Storage is " + data);
+
+        localStorage.setItem(APP_PREFIX + "-Locations", data);
+    }
+
     // Private methods:
 
     // Given a latitude and longitude, this method looks through all
@@ -233,15 +259,15 @@ function LocationWeatherCache() {
     // matching latitude and longitude if one exists, otherwise it
     // returns -1.
     //
-    this.indexForLocation = function (latitude, longitude) {
+    indexForLocation = function (latitude, longitude) {
         var index = -1;
-
+        var n = locations.length;
         //alert("location len = " + this.length());
 
         //only when there is locations
-        if (this.length() > 0) {
-            for (var i = 0; i < this.length() ; i++) {
-                var loc = this.locationAtIndex(i);
+        if (n > 0) {
+            for (var i = 0; i < n ; i++) {
+                var loc = locations[i];
 
                 //alert("find location?" + JSON.stringify(loc));
 
@@ -256,25 +282,21 @@ function LocationWeatherCache() {
 
         return index;
     }
-
-    this.getAllLocations = function () {
-        return locations;
-    }
 }
 
 
 // Restore the singleton locationWeatherCache from Local Storage.
 //
 function loadLocations() {
-    var locationJSON = localStorage.getItem(APP_PREFIX);
+    var locationText = localStorage.getItem(APP_PREFIX);
 
     //alert("location stored in local storage = " + locationJSON);
 
-    if (locationJSON != "") {
-        locationWeatherCache.initialiseFromPDO(JSON.parse(locationJSON));
+    if (locationText != null) {
+        locationWeatherCache.initialiseFromPDO(JSON.parse(locationText));
     }
     else {
-        alert("no content");
+        //alert("no content");
     }
 }
 

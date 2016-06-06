@@ -7,16 +7,19 @@ var FORMAT_ADDRESS;
 
 function initialize() {
     //default to disaply Melbourne city map
-    showMap(-37.814107, 144.96327999999994, "Melbourne VIC, Australia");
+    //showMap(-37.814107, 144.96327999999994, "Melbourne VIC, Australia");
+    //Adelaide
+    showMap(-34.9285894, 138.5999429, "Adelaide SA 5000, Australia");
 
-    //global variable to store location weather cache object
-    LOCATIONWEATHERCACHE = new LocationWeatherCache();
     //load data from local storage
-    LOCATIONWEATHERCACHE.loadFromLocalStorage();
+    locationWeatherCache.loadFromLocalStorage();
 
-    WEATHER_LAT = -37.814107;
-    WEATHER_LNG = 144.96327999999994;
-    FORMAT_ADDRESS = "Melbourne VIC, Australia";
+    //alert("locations = " + JSON.stringify( locationWeatherCache.toJSON()));
+
+
+    //WEATHER_LAT = -37.814107;
+    //WEATHER_LNG = 144.96327999999994;
+    //FORMAT_ADDRESS = "Melbourne VIC, Australia";
 
     //LOCATIONWEATHERCACHE.addLocation(-37.814107, 144.96327999999994, "Melbourne VIC, Australia")
 }
@@ -103,7 +106,7 @@ function addLocation() {
             //alert("adding location ...");
 
             //get location
-            var index = LOCATIONWEATHERCACHE.addLocation(WEATHER_LAT, WEATHER_LNG, nickName);
+            var index = locationWeatherCache.addLocation(WEATHER_LAT, WEATHER_LNG, nickName);
 
             //alert("Saved location at index = " + index + " locations = " + JSON.stringify(LOCATIONWEATHERCACHE.locationAtIndex(index)));
 
@@ -111,7 +114,7 @@ function addLocation() {
 
             //get weather for the location by call back:
             var today = new Date();
-            LOCATIONWEATHERCACHE.getWeatherAtIndexForDate(index, today, weatherForecast)
+            locationWeatherCache.getWeatherAtIndexForDate(index, today, weatherForecast)
         }
         else {
             alert("Latitude, Longitude and Address must not be empty!");
@@ -124,7 +127,7 @@ function weatherForecast(date, data) {
     //document.getElementById("debug").innerHTML = JSON.stringify(data);
 
     //store into local storage
-    LOCATIONWEATHERCACHE.saveToLocalStorage();
+    locationWeatherCache.storeLocationIntoStorage();
 
     //index page
     location.href = "index.html";

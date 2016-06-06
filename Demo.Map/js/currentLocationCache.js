@@ -67,7 +67,13 @@ function displayForecast(date, forecast) {
 //get location from latitude and longitude
 //function displayFormatAddressAndMap(lat, lng) {
 //    //google geocode url for query location - current address.
-//    var url = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7MZxN81AK3EWqKYXwERmM-Dbl6ZZGoB0&latlng=" + lat + "," + lng;
+//    var url = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7MZxN81AK3EWqKYXwERmM-Dbl6ZZGoB0&latlng=-34.9452817,138.6174446"; + lat + "," + lng;
+//    var urlParkside = "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC7MZxN81AK3EWqKYXwERmM-Dbl6ZZGoB0&address=Parkside, SA Australia";
+// Parkside location:
+//"location" : {
+//    "lat" : -34.9452817,
+//    "lng" : 138.6174446
+//},
 
 //    $.ajax({
 //        type: 'GET',
@@ -108,15 +114,6 @@ function displayWeather(value) {
     currentLocationWeatherCache.getWeatherForDate(newDate, getForecast);
 }
 
-//Get current location and forecast information.
-function getCurrentLocationAndWeatherInformation() {
-    //load current location cache from sessionStorage (session cookie)
-    currentLocationWeatherCache.initializeCurrentLocation();
-
-    //Get current location by callback via using Google Geocode API
-    currentLocationWeatherCache.getCurrentLocationByGeocode(currentLocationAddress);
-}
-
 //Geocode getCurrentPosition callback
 function currentLocationAddress(position) {
     //alert("Response current position latitude is = " + JSON.stringify(position.coords.latitude));
@@ -139,7 +136,7 @@ function getForecast(date, forecast) {
     //display forecast
     displayForecast(date, forecast);
 
-    document.getElementById("textArea").value = JSON.stringify(currentLocationWeatherCache.toJSON());
+    //document.getElementById("textArea").value = JSON.stringify(currentLocationWeatherCache.toJSON());
 
     //document.getElementById("debug").innerHTML = JSON.stringify(currentLocationWeatherCache.toJSON());
 
@@ -167,9 +164,15 @@ function CurrentLocationWeatherCache() {
     }
 
     //use google geocode to retrieve current locaion using passing callback function.
-    this.getCurrentLocationByGeocode = function (callback) {
+    this.getCurrentLocationByGeocode = function (successCallBack, errorCallback) {
         //alert("the callback = " + JSON.stringify(callback));
-        navigator.geolocation.getCurrentPosition(callback);
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+
+        navigator.geolocation.getCurrentPosition(successCallBack, errorCallback, options);
     }
 
     this.getWeatherForDate = function (date, callback) {
@@ -239,12 +242,12 @@ function CurrentLocationWeatherCache() {
     };
 
     //populate private location from sessionStorage
-    this.initializeCurrentLocation = function () {
+    this.loadCurrentLocation = function () {
         //alert("calling initialize function ....");
         var jsonText = sessionStorage.getItem(APP_PREFIX + "-CurrentLocation");
 
         //alert("json text is " + jsonText);
-        //currentLocation = {};
+        currentLocation = {};
 
         if (jsonText != null) {
             var json = JSON.parse(jsonText);

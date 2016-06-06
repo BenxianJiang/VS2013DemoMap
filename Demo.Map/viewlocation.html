@@ -33,7 +33,7 @@
                                     <tr><td><b>Weather</b></td><td></td></tr>
                                     <tr><td>Location:</td><td><span id="currentAddress"></span>   <input type="button" id="btnRemove" value="Remove Location" onclick="removeLocation()" /></td></tr>
                                     <tr><td>Date:</td><td><span id="weatherDate"></span></td></tr>
-                                    <tr><td>Select Date:</td><td><input type="range" id="dateSlider" name="dateSlider" min="-29" max="0" onclick="displayWeather(this.value);" value="0" style="width: 280px" /></td></tr>
+                                    <tr><td>Select Date:</td><td><input type="range" id="dateSlider" name="dateSlider" min="-29" max="0" oninput="updateDateFieldOnly(this.value);" onclick="displayWeather(this.value);" value="0" style="width: 280px" /></td></tr>
                                     <tr><td>Summary:</td><td><span id="weatherSummary" /></td></tr>
                                     <tr><td>Low:  <span id="minTemp" /></td><td>High: <span id="maxTemp" /></td></tr>
                                     <tr><td>Humidity:</td><td><span id="humidity" /></td></tr>
@@ -55,7 +55,6 @@
     <!--   JavaScript files:   -->
     <script src="js/locationWeatherCache.js"></script>
     <script src="js/viewLocationPage.js"></script>
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </body>

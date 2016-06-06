@@ -32,7 +32,7 @@
         <main class="mdl-layout__content">
             <div class="content-grid mdl-grid">
                 <div class="mdl-cell">
-                    <input id="address" type="search" value="Melbourne VIC, Australia"> <input type="button" value="Get Address" placeholder="Enter Location" onclick="codeAddress()">
+                    <input id="address" type="search" value="Adelaide SA 5000, Australia"> <input type="button" value="Get Address" placeholder="Enter Location" onclick="codeAddress()">
                     <div id="formatAddress"></div>
                 </div>
                 <div id="formatAddress"></div>
@@ -60,13 +60,14 @@
             <!--<div class="mdl-cell">
                 Debug Text: <textarea id="debug"></textarea>
             </div>-->
-                        <div class="mdl-cell" id="map_canvas" style="width: 320px; height: 480px;" />
+            <div class="mdl-cell" id="map_canvas" style="width: 320px; height: 480px;" />
         </main>
     </div>
+    <script src="js/locationWeatherCache.js"></script>
+    <script src="js/addlocationPage.js"></script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </body>
 </html>
-<script src="js/mainCache.js"></script>
-<script src="js/mainPageTest.js"></script>
-<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
 

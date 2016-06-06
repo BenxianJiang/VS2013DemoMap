@@ -5,32 +5,49 @@
 var geocoder;
 var map;
 var infoWindow;
-var SHOWMAP_FIRST = true;
+//var SHOWMAP_FIRST = true;
 var locationIndex = localStorage.getItem(APP_PREFIX + "-selectedLocation");
 
+//alert(locationIndex);
+
 function initPage() {
+    //alert("come here!");
+
     if (locationIndex != null) {
-        //var locationNames = ["Location 0", "Location A", "Location B"];
-        LOCATIONWEATHERCACHE = new LocationWeatherCache();
-        LOCATIONWEATHERCACHE.loadFromLocalStorage();
-        var loc = LOCATIONWEATHERCACHE.locationAtIndex(locationIndex);
+
+        //alert("index no null!");
+
+        locationWeatherCache.loadFromLocalStorage();
+
+        var loc = locationWeatherCache.locationAtIndex(locationIndex);
 
         //document.getElementById("debug").innerText = JSON.stringify(loc);
 
-        var forecast = loc.forecasts[0];
+        //get current date forecast
         var today = new Date();
-        // If a location name was specified, use it for header bar title.
-        document.getElementById("headerBarTitle").innerText = loc.nickname;
-        document.getElementById("currentAddress").innerText = loc.nickname;
-        document.getElementById("weatherDate").innerText = today.simpleDateString();
-        document.getElementById("weatherSummary").innerText = forecast.weather.summary;
-        document.getElementById("minTemp").innerText = ConvertToCelsius(forecast.weather.temperatureMin);
-        document.getElementById("maxTemp").innerText = ConvertToCelsius(forecast.weather.temperatureMax);
-        document.getElementById("humidity").innerText = forecast.weather.humidity;
-        document.getElementById("windSpeed").innerText = forecast.weather.windSpeed;
+        var key = loc.latitude + "," + loc.longitude + "," + today.forecastDateString();
 
-        //displayWeatherInformation(forecast, today);
+        //only when there is current forecast.
+        if (loc.forecasts.hasOwnProperty(key))
+        {
+            //alert("has key!");
 
+            var forecast = loc.forecasts[key];
+
+            // If a location name was specified, use it for header bar title.
+            document.getElementById("headerBarTitle").innerText = loc.nickname;
+            document.getElementById("currentAddress").innerText = loc.nickname;
+            //document.getElementById("weatherDate").innerText = today.simpleDateString();
+            //document.getElementById("weatherSummary").innerText = forecast.summary;
+            //document.getElementById("minTemp").innerText = forecast.temperatureMin;
+            //document.getElementById("maxTemp").innerText = forecast.temperatureMax;
+            //document.getElementById("humidity").innerText = forecast.humidity;
+            //document.getElementById("windSpeed").innerText = forecast.windSpeed;
+
+            displayWeatherInformation(forecast, today);       
+        }
+
+        //draw map
         var addr = loc.nickname;
         var lat = loc.latitude;
         var lng = loc.longitude;
@@ -39,15 +56,23 @@ function initPage() {
     }
 }
 
+//display date field only.
+function updateDateFieldOnly(value)
+{
+    var today = new Date();
+    var valueDate = Date.addDays(value);
+    document.getElementById("weatherDate").innerText = valueDate.simpleDateString();
+}
+
 //display weather information
 function displayWeatherInformation(forecast, date)
 {
-    document.getElementById("weatherDate").innerText = today.simpleDateString();
-    document.getElementById("weatherSummary").innerText = forecast.weather.summary;
-    document.getElementById("minTemp").innerText = ConvertToCelsius(forecast.weather.temperatureMin);
-    document.getElementById("maxTemp").innerText = ConvertToCelsius(forecast.weather.temperatureMax);
-    document.getElementById("humidity").innerText = forecast.weather.humidity;
-    document.getElementById("windSpeed").innerText = forecast.weather.windSpeed;
+    document.getElementById("weatherDate").innerText = date.simpleDateString();
+    document.getElementById("weatherSummary").innerText = forecast.summary;
+    document.getElementById("minTemp").innerText = forecast.temperatureMin;
+    document.getElementById("maxTemp").innerText = forecast.temperatureMax;
+    document.getElementById("humidity").innerText = forecast.humidity;
+    document.getElementById("windSpeed").innerText = forecast.windSpeed;
 }
 
 //draw map on the page.
@@ -80,36 +105,37 @@ function drawMap(lat, lng, addr) {
 //input: value is integer value for date slider selected.
 function displayWeather(value) {
     //map has been drawed, no need to draw.
-    SHOWMAP_FIRST = false;
+    //SHOWMAP_FIRST = false;
 
     //get slider date
     var date = new Date();
     var newDate = date.addDays(value);
 
     //dispaly weather date.
-    document.getElementById("weatherDate").innerText = newDate.simpleDateString();
+    //document.getElementById("weatherDate").innerText = newDate.simpleDateString();
 
     //Display weather other information by the callback function weatherForecast
-    LOCATIONWEATHERCACHE.getWeatherAtIndexForDate(locationIndex, newDate, weatherForecast);
+    locationWeatherCache.getWeatherAtIndexForDate(locationIndex, newDate, weatherForecast);
 }
 
 //data - forecast object returned from forecast.io 
 function weatherForecast(date, forecast) {
     //document.getElementById("debug").innerHTML = JSON.stringify(forecast);
-
+    
     //Display weather information
-    document.getElementById("weatherSummary").innerText = forecast.weather.summary;
-    document.getElementById("minTemp").innerText = ConvertToCelsius(forecast.weather.temperatureMin);
-    document.getElementById("maxTemp").innerText = ConvertToCelsius(forecast.weather.temperatureMax);
-    document.getElementById("humidity").innerText = forecast.weather.humidity;
-    document.getElementById("windSpeed").innerText = forecast.weather.windSpeed;
+    displayWeatherInformation(forecast, date);
+    //document.getElementById("weatherSummary").innerText = forecast.summary;
+    //document.getElementById("minTemp").innerText = forecast.temperatureMin;
+    //document.getElementById("maxTemp").innerText = forecast.temperatureMax;
+    //document.getElementById("humidity").innerText = forecast.humidity;
+    //document.getElementById("windSpeed").innerText = forecast.windSpeed;
 }
 
 function removeLocation()
 {
-    LOCATIONWEATHERCACHE.removeLocationAtIndex(locationIndex);
+    locationWeatherCache.removeLocationAtIndex(locationIndex);
 
-    LOCATIONWEATHERCACHE.saveToLocalStorage();
+    locationWeatherCache.storeLocationIntoStorage();
 
     location.href = "index.html";
 }

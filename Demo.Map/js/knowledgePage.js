@@ -1,15 +1,133 @@
+var currentLocationWeatherCache = new CurrentLocationWeatherCache();
+var geocoder;
+var map;
+var infoWindow;
+var WEATHER_LAT;
+var WEATHER_LNG;
+var FORMAT_ADDRESS;
+
 //check browser have ability to Get current location by Google GeoCode
 if (!navigator.geolocation) {
     error('Geo Location is not supported');
 }
+else
+{
+    //navigator.geolocation.getCurrentPosition(getCurrentLocation);
+}
 
-var currentLocationWeatherCache = new CurrentLocationWeatherCache();
+function getCurrentLocation(position)
+{
+    document.getElementById("debug").value = "Response current position latitude is = " + JSON.stringify(position.coords.latitude);
+}
+
 //var WEATHER_URL_KEY = "https://api.forecast.io/forecast/044c9e5b7dea840a676a3d5ffe2e10df/";
+
+function codeAddress() {
+    var address = document.getElementById("address").value;
+
+    //document.getElementById("debug").value = "current address input is " + address;
+
+    // next line creates asynchronous request
+    geocoder.geocode({ 'address': address }, function (results, status) {
+        // and this is function which processes response
+        if (status == google.maps.GeocoderStatus.OK) {
+            displayInfo(results);
+        } else {
+            //alert("Geocode was not successful for the following reason: " + status);
+            document.getElementById("debug").innerText = "[ERROR] - Geocode was not successful for the following reason: " + status;
+        }
+    });
+}
+
+//display different values on the page
+function displayInfo(results) {
+    var lat = results[0].geometry.location.lat();
+    var lng = results[0].geometry.location.lng();
+    var addr = results[0].formatted_address;
+
+    document.getElementById("debug").value = " format address = " + addr;
+
+    //document.getElementById("latitude").value = lat;
+    //document.getElementById("longitude").value = lng;
+    //document.getElementById("formatAddress").innerText = addr;
+
+    //WEATHER_LAT = lat;
+    //WEATHER_LNG = lng;
+    //FORMAT_ADDRESS = addr;
+
+    //display map
+    showMap(lat, lng, addr);
+
+    //document.getElementById("debug").value = JSON.stringify(data);
+}
+
+//display a map for the correct address.
+function showMap(lat, lng, addr) {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(lat, lng);
+    var myOptions = {
+        zoom: 14,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    //map.setCenter(data[0].geometry.location);
+
+    var marker = new google.maps.Marker({
+        map: map,
+        position: latlng
+        //position: data[0].geometry.location
+    });
+
+    //display formatted address as an annotation on the map
+    infowindow = new google.maps.InfoWindow;
+    infowindow.setContent(addr);
+    infowindow.open(map, marker);
+}
+
 
 function testPage() {
     var json = {};
     var arr = [];
     var debugText = "";
+    var localStorageText = localStorage.getItem("GoWithWind");
+
+    //Can not parse empty string! this will give runtime error!
+    //json = JSON.parse("");
+
+    //how about any string (not Json object)? - this will give runtime error also as it is not valid JSON string!
+    //json = JSON.parse("go with the wind!");
+
+    //can it parse null object? - it will parse as value null! this is correct check!
+    //json = JSON.parse(null);
+
+    //can use this and check if it is null!
+    json = JSON.parse(localStorage.getItem("GoWithWind"));
+    
+    if (json != null)
+    {
+        debugText = debugText + "Test for JSON.parse('') != null is True! ***** ";
+    }
+    else
+    {
+        debugText = debugText + "Test for JSON.parse('') != null is False! ***** ";
+    }
+    
+    //check if local storage key exist:
+    if (localStorageText != null)
+    {
+        debugText = debugText + "Json localStorage key does not exist! But its text = " + localStorageText;
+    }
+    else
+    {
+        //come here!
+        debugText = debugText + "Json localStorage key does not exist!";
+    }
+
+    document.getElementById("debug").value = debugText;
+
+    return;
 
     if (json.hasOwnProperty("any")) {
         debugText = debugText + "JSON object = {} and test json.hasOwnProperty('any') is true! *** ";

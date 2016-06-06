@@ -14,7 +14,7 @@
     <link rel="apple-touch-icon-precomposed" href="images/icon.png" />
 </head>
 
-<body onload="getCurrentLocationAndWeatherInformation();">
+<body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
@@ -27,21 +27,30 @@
         </header>
 
         <main class="mdl-layout_content">
-            <ul class="mdl-list" id="locationList">
-                <li class="mdl-list__item mdl-list_item--two-line" onclick="viewCurrentLocation();">
-                    <span class="mdl-list_item-primary-content">
-                        <span>
-                            <img id="preLoad" src="images/loading.gif" class="list-avatar" />
+            <div>
+                <ul class="mdl-list" id="locationList">
+                    <li class="mdl-list__item mdl-list_item--two-line" onclick="viewCurrentLocation();">
+                        <span class="mdl-list_item-primary-content">
+                            <span>
+                                <img id="preLoad" src="images/loading.gif" class="list-avatar" />
+                            </span>
+                            <span>
+                                <span><b>Current Location</b> <span id="weather0" class="mdl-list_item-sub-title">Loading ...</span></span>
+                            </span>
                         </span>
-                        <span>
-                            <span><b>Current Location</b> <span id="weather0" class="mdl-list_item-sub-title">Loading ...</span></span>
-                        </span>
-                    </span>
-                </li>
-                <li class="mdl-list__item mdl-list_item--two-line">
-                    Debug: <textarea rows="40" cols="200" id="textArea">some value here</textarea>          
-                </li>
-            </ul>
+                    </li>
+                    <li class="mdl-list__item mdl-list_item--two-line">
+                        Address: <input type="search" id="address" value="Input Address">
+                    </li>
+                    <li class="mdl-list__item mdl-list_item--two-line">
+                        Get Address: <input type="button" id="btnSearchAddress" value="Search" onclick="codeAddress()">
+                    </li>
+                    <li class="mdl-list__item mdl-list_item--two-line">
+                        Debug: <textarea rows="40" cols="200" id="debug">some value here</textarea>          
+                    </li>
+                </ul>
+            </div>
+            <div class="mdl-cell" id="map_canvas" style="width: 320px; height: 480px;" />
         </main>
     </div>
     <!--   JavaScript files:   -->
